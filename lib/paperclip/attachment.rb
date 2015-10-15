@@ -497,8 +497,10 @@ module Paperclip
 
     def post_process(*style_args) #:nodoc:
       return if @queued_for_write[:original].nil?
+      puts "==============================before callback original size #{styles[:original].size}============"
 
       instance.run_paperclip_callbacks(:post_process) do
+        puts "==============================IN CALL BACK original size #{styles[:original].size}============"
         instance.run_paperclip_callbacks(:"#{name}_post_process") do
           unless @options[:check_validity_before_processing] && instance.errors.any?
             post_process_styles(*style_args)
@@ -508,7 +510,7 @@ module Paperclip
     end
 
     def post_process_styles(*style_args) #:nodoc:
-      post_process_style(:original, styles[:original]) if styles.include?(:original) && process_style?(:original, style_args)
+      #post_process_style(:original, styles[:original]) if styles.include?(:original) && process_style?(:original, style_args)
       styles.reject{ |name, style| name == :original }.each do |name, style|
         post_process_style(name, style) if process_style?(name, style_args)
       end
